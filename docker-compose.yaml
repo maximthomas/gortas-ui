@@ -1,0 +1,13 @@
+version: '3.7'
+
+services:
+
+  gortas-ui:
+    build: 
+      context: .
+      args:
+        - REACT_APP_SIGN_IN_URL=http://localhost:8080/gortas/v1/login/users/kerberos
+    ports:
+     - 3000:80
+    environment:
+     - REACT_APP_SIGN_IN_URL=http://localhost:8080/gortas/v1/login/users/kerberos
