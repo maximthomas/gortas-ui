@@ -1,6 +1,6 @@
 import React from 'react';
 
-const idmUrl = process.env.REACT_APP_IDM_URL
+const idmUrl = process.env.REACT_APP_GORTAS_URL + '/gortas/v1/idm';
 
 export class Profile extends React.Component {
 

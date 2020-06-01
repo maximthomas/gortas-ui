@@ -5,8 +5,8 @@ import {ThemeProvider} from "@material-ui/styles";
 
 import {createMuiTheme, CssBaseline, Link, Paper} from "@material-ui/core";
 
-const signUpUrl = process.env.REACT_APP_SIGN_UP_URL
-const signInUrl = process.env.REACT_APP_SIGN_IN_URL
+const signUpUrl = process.env.REACT_APP_GORTAS_URL + process.env.REACT_APP_GORTAS_SIGN_UP_PATH;
+const signInUrl = process.env.REACT_APP_GORTAS_URL + process.env.REACT_APP_GORTAS_SIGN_IN_PATH;
 
 
 const theme = createMuiTheme({
