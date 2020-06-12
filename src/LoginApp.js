@@ -46,9 +46,12 @@ export class LoginApp extends React.Component {
         this.getCallbacks()
     }
 
+    getAuthUrl() {
+        return this.state.authState.authUrl + window.location.search;
+    }
 
     getCallbacks() {
-        fetch(this.state.authState.authUrl, {
+        fetch(this.getAuthUrl(), {
             credentials: "include",
         }).then((response) => {
                 return response.json();
@@ -80,7 +83,7 @@ export class LoginApp extends React.Component {
             callbacks: callbacks,
         }
         const requestBody = JSON.stringify(request)
-        fetch(this.state.authState.authUrl, {
+        fetch(this.getAuthUrl(), {
             method: 'POST',
             body: requestBody,
             credentials: "include",
@@ -114,6 +117,9 @@ export class LoginApp extends React.Component {
         }
         if (data["status"]) {
             if (data["status"] === "success") {
+                if(!!data["redirect_uri"]) {
+                    window.location.href = data["redirect_uri"];
+                }
                 this.setState({ succeeded: true });
             }
             else if (data["status"] === "failed") {
