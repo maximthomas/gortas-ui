@@ -76,7 +76,10 @@ export class LoginApp extends React.Component {
     }
 
     submitCallbacks = (e) => {
-        e.preventDefault();
+        if(!!e) {
+            e.preventDefault();
+        }
+
         const callbacks = this.state.callbacks.slice();
         const request = {
             module: this.state.module,
