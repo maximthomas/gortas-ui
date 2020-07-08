@@ -1,66 +1,67 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Button, Modal} from "@material-ui/core";
 import { makeStyles } from '@material-ui/core/styles';
+import { useHistory } from "react-router-dom";
 
 const idmUrl = process.env.REACT_APP_GORTAS_URL + '/gortas/v1/idm';
 
-export class Profile extends React.Component {
+export function Profile(props) {
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            session: {},
-            qrAuth: {
-                open: false,
-            }
-        }
-    }
+    const [session, setSession] = useState({});
+    const [qrAuth, setQRAuth] = useState({open:false});
 
-    componentDidMount() {
-        this.getProfile();
-    }
+    const history = useHistory();
 
-    getProfile = () => {
-        fetch(idmUrl, {
+    useEffect(() => {
+        getProfile();
+    }, []);
+
+    const getProfile = async () => {
+        const response = await fetch(idmUrl, {
             method: 'GET',
             credentials: "include",
             headers: {
                 'Content-Type': 'application/json'
             },
-        }).then((response) => {
-            return response.json();
-        }).then((data) => {
-            this.setState({session: data})
         });
-    }
-
-    openQRAuth = () => {
-        this.setState({qrAuth: {open: true}})
-    }
-    closeQRAuth = () => {
-        this.setState({qrAuth: {open: false}})
-    }
-
-    render() {
-        if (!!this.state.session["properties"]) {
-            let props = this.state.session["properties"];
-            let propsElements = []
-            if (!!props) {
-                Object.keys(props).forEach((k) => {
-                    propsElements.push(<p key={k}>{k}: {props[k]}</p>)
-                });
-            }
-            return <div>
-                <p>Login: {props["sub"]}</p>
-                {propsElements}
-                <div style={{textAlign: 'center'}}>
-                    <Button onClick={this.openQRAuth}  variant="contained" type="button" color="default">Proceed</Button>
-                    <QRAuth open={this.state.qrAuth.open} handleClose={this.closeQRAuth} />
-                </div>
-            </div>
-        } else {
-            return <div/>
+        if (response.status === 401){
+            history.push('/login/users/login');
+            return;
         }
+        const data = await response.json();
+        setSession(data);
+    }
+
+    const openQRAuth = () => {
+        setQRAuth({open: true});
+    }
+    const closeQRAuth = () => {
+        setQRAuth({open: false});
+    }
+
+    return <Properties session={session} qrAuth={qrAuth} openQRAuth={openQRAuth} closeQRAuth={closeQRAuth}/>;
+
+}
+
+function Properties({session, qrAuth, openQRAuth, closeQRAuth}) {
+    if (!!session["properties"]) {
+        let props =session["properties"];
+        let propsElements = []
+        if (!!props) {
+            Object.keys(props).forEach((k) => {
+                propsElements.push(<p key={k}>{k}: {props[k]}</p>)
+            });
+        }
+        return <div>
+            <p>Login: {props["sub"]}</p>
+            {propsElements}
+            <div style={{textAlign: 'center'}}>
+                <Button onClick={openQRAuth}  variant="contained" type="button" color="default">Set QR Auth</Button>
+                <QRAuth open={qrAuth.open} handleClose={closeQRAuth} />
+            </div>
+        </div>
+    } else {
+        return <div/>
     }
 }
 
@@ -96,7 +97,7 @@ function QRAuth(props) {
     }
 
     const onRendered = () => {
-       fetchData()
+       fetchData();
     }
 
     return <Modal
@@ -107,7 +108,7 @@ function QRAuth(props) {
         aria-labelledby="simple-modal-title"
         aria-describedby="simple-modal-description">
         <div className={classes.paper}>
-            <h1>123123123</h1>
+            <h1>Scan QR Code</h1>
             <img src={data.qr} alt={'qr code'} style={{display: 'block', margin: '0 auto'}}/>
         </div>
 

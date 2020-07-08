@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, TextField } from '@material-ui/core'
+import {Button, Link, TextField} from '@material-ui/core'
 import {AutoSubmit} from "./callbacks/AutoSubmit";
 
 export class Callbacks extends React.Component {
@@ -11,7 +11,13 @@ export class Callbacks extends React.Component {
             </div>)
         const submitBtn = <div style={{textAlign: 'center'}}><Button  variant="contained" type="submit" color="default">Proceed</Button></div>
         const form = <form onSubmit={this.props.submitCallbacks} autoComplete={"off"}>{callbacks}{submitBtn}</form>
-        return <div><h1>{this.props.title}</h1>{form}</div>
+        return <div><h1>{this.props.title}</h1>{form}
+            <div id="links">
+                <Link href="/login/users/login"  color="inherit">Login</Link>
+                <Link href="/login/users/registration"  color="inherit">Registration</Link>
+                <Link href="/login/users/qr"  color="inherit">QR</Link>
+            </div>
+        </div>
     }
 
     getCallback(callback) {

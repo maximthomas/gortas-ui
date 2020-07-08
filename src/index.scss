@@ -33,7 +33,12 @@ body {
       }
     }
     #links {
+        margin-top: 5px;
         padding: 3px;
         text-align: center;
+
+        a {
+            margin:10px;
+        }
     }
 }
