@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import React, {useEffect} from "react";
 
 export const AutoSubmit = (props) => {
